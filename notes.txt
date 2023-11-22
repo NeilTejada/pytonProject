@@ -1,0 +1,13 @@
+# activate venv
+
+windows:
+name of your server- projectServer\Scripts\activate 
+
+
+mac, linux:
+source projectServer/bin/activate
+
+
+
+# run the flask project
+python3 server.py
