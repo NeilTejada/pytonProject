@@ -1,3 +1,4 @@
+from flask import Flask, request
 from flask import Flask
 from config import me
 from mock_data import catalog
@@ -28,9 +29,57 @@ def about_me():
 def get_products():
     return json.dumps(catalog)
 
+@app.post("/api/product")
+def save_product():
+    product = request.get_json()
+    # todo: save to db instead of in-memory array
+    catalog.append(product)
+    return json.dumps({"status":"saved"})
+
 @app.get("/api/product/count")
 def product_count():
     total = len(catalog)
     return json.dumps({"total": total})
+
+@app.get("/api/reports/total")
+def get_total():
+    total = 0
+    for product in catalog:
+        total += product["price"]
+
+    return json.dumps({"value": total})
+
+#get /api/catagories
+@app.get("/api/categories")
+def get_categories():
+    results = []
+    for product in catalog:
+        category = product["category"]
+
+        if category not in results:
+            results.append(category)
+
+    return json.dumps(results)
+
+@app.get("/api/product/category/<category>")
+def producnt_by_category(category):
+    results = []
+    for product in catalog:
+        if product["category"].lower() == category.lower():
+            results.append(product)
+    
+    return json.dumps(results)
+
+#get /api/product/search/
+@app.get("/api/product/search/<term>")
+def search_product(term):
+    results = []
+    for product in catalog:
+        if term.lower() in product["title"].lower():
+            results.append(product)
+
+    return json.dumps(results)
+
+
 
 app.run(debug=True)
