@@ -2,8 +2,10 @@ from flask import Flask, request
 from config import me, db
 from mock_data import catalog
 import json
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app) #warning: this line disables CORS policy
 
 @app.get("/")
 def home():
@@ -31,10 +33,9 @@ def get_products():
 @app.post("/api/product")
 def save_product():
     product = request.get_json()
-    # save to db
-    db.products.insert_one(product)
-    print(product)
-    return json.dumps(product)
+    #todo: save to db instead of in-memroy array
+    catalog.append(product)
+    return json.dumps({"status":"saved"})
 
 @app.get("/api/product/count")
 def product_count():

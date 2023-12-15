@@ -3,7 +3,7 @@
 windows:
 name of your server- projectServer\Scripts\activate 
 
-
+# activate
 mac, linux:
 source bin/activate
 
